@@ -8,7 +8,10 @@ export const envSchema = z.object({
   ALLOWED_ORIGINS: z.string().min(1, 'ALLOWED_ORIGINS is required.'),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required.'),
   JWT_SECRET: z.string().min(1, 'JWT_SECRET is required.'),
-  JWT_EXPIRES_IN: z.string().min(1, 'JWT_EXPIRES_IN is required.')
+  JWT_EXPIRES_IN: z.string().min(1, 'JWT_EXPIRES_IN is required.'),
+  ADMIN_REGISTRATION_KEY: z
+    .string()
+    .min(1, 'ADMIN_REGISTRATION_KEY is required.')
 })
 
 export type Env = z.infer<typeof envSchema>

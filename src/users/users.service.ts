@@ -22,11 +22,10 @@ export class UsersService {
     user_id: true,
     name: true,
     lastName: true,
-    phone: true,
     email: true,
+    physiotherapistId: true,
     role: true,
-    createdAt: true,
-    updateAt: true
+    createdAt: true
   }
 
   async findById(id: string, select?: Prisma.UserSelect) {
@@ -39,6 +38,7 @@ export class UsersService {
   }
 
   async findByEmail(email: string, select?: Prisma.UserSelect) {
+    console.log('Se va aregistrar', email)
     return await this.prisma.user.findUnique({
       where: {
         email: email.toLowerCase().trim()
@@ -48,13 +48,21 @@ export class UsersService {
   }
 
   async create(payload: CreateUserDto) {
-    const { password, ...userData } = payload
+    const { password, physiotherapistId, ...userData } = payload
     // Buscar si el email ya existe de forma proactiva
     const existingUser = await this.findByEmail(payload.email)
-    console.log('Se va aregistrar', existingUser)
 
     if (existingUser) {
       throw new BadRequestException('El correo electrónico ya existe')
+    }
+
+    if (physiotherapistId) {
+      const physio = await this.prisma.user.findUnique({
+        where: { user_id: physiotherapistId }
+      })
+      if (!physio || physio.role !== 'PHYSIOTHERAPIST') {
+        throw new BadRequestException('El fisioterapeuta asignado no es válido')
+      }
     }
     try {
       // Hashear la contraseña
@@ -63,7 +71,11 @@ export class UsersService {
       return await this.prisma.user.create({
         data: {
           ...userData,
-          passwordHash: hashedPassword
+          passwordHash: hashedPassword,
+          // Relación con el fisioterapeuta si existe el ID
+          physiotherapist: physiotherapistId
+            ? { connect: { user_id: physiotherapistId } }
+            : undefined
         },
         // Restringir lo que devuelvo mediante el userSelector
         select: this.userSelector

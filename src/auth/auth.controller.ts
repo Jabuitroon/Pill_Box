@@ -13,6 +13,7 @@ import type { responseAuth, UserActiveInterface } from './interfaces'
 import { LoginDto } from './dto/login.dto'
 import { AuthGuard } from './guards/auth.guard'
 import { ActiveUser } from '../common/decorators/active-user.decorator'
+import { RegisterAdminDto } from './dto/register-admin.dto'
 
 @Controller('auth')
 export class AuthController {
@@ -21,6 +22,11 @@ export class AuthController {
   @Post('register')
   async register(@Body() payload: RegisterDto): Promise<responseAuth> {
     return this.authService.register(payload)
+  }
+
+  @Post('register-admin')
+  async registerAdmin(@Body() registerAdminDto: RegisterAdminDto) {
+    return await this.authService.registerAdmin(registerAdminDto)
   }
 
   // @UseGuards(LocalAuthGuard)

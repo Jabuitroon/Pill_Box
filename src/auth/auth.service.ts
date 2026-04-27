@@ -9,13 +9,17 @@ import { RegisterDto } from './dto/register.dto'
 import { HashingService } from '../providers/hashing/hashing.service'
 import { responseAuth } from './interfaces'
 import { LoginDto } from './dto/login.dto'
+import { RegisterAdminDto } from './dto/register-admin.dto'
+import { UserRole } from '@app/generated/prisma/client'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-    private readonly hashingService: HashingService
+    private readonly hashingService: HashingService,
+    private readonly configService: ConfigService
   ) {}
   // Lógica para registrar un usuario
   async register(newUser: RegisterDto): Promise<responseAuth> {
@@ -30,6 +34,24 @@ export class AuthService {
         `Error al registrar el usuario: ${error}`
       )
     }
+  }
+
+  async registerAdmin(payload: RegisterAdminDto) {
+    const { adminKey, ...userData } = payload
+
+    // Verificar la llave maestra
+    const masterKey = this.configService.get<string>('ADMIN_REGISTRATION_KEY')
+    if (adminKey !== masterKey) {
+      throw new UnauthorizedException(
+        'Llave de registro administrativo inválida'
+      )
+    }
+
+    // Forzamos el rol a ADMIN
+    return await this.usersService.create({
+      ...userData,
+      role: UserRole.ADMIN
+    })
   }
 
   // Lógica para validar usuario en el Login

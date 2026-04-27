@@ -5,7 +5,8 @@ import {
   IsEnum,
   IsOptional,
   IsNotEmpty,
-  IsPhoneNumber
+  IsPhoneNumber,
+  IsUUID
 } from 'class-validator'
 import { Transform } from 'class-transformer'
 import { UserRole } from '../../generated/prisma/client'
@@ -37,4 +38,8 @@ export class CreateUserDto {
   @IsEnum(UserRole) // Valida que el valor coincida con el Enum de la DB entre admin y cliente
   @IsOptional() // Default(user) en Prisma
   role?: UserRole
+
+  @IsUUID()
+  @IsOptional()
+  physiotherapistId?: string
 }
