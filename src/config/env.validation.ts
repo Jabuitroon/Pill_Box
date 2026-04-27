@@ -5,7 +5,10 @@ export const envSchema = z.object({
     .enum(['development', 'production', 'test'])
     .default('development'),
   PORT: z.coerce.number().default(3000),
-  DATABASE_URL: z.string().url()
+  ALLOWED_ORIGINS: z.string().min(1, 'ALLOWED_ORIGINS is required.'),
+  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required.'),
+  JWT_SECRET: z.string().min(1, 'JWT_SECRET is required.'),
+  JWT_EXPIRES_IN: z.string().min(1, 'JWT_EXPIRES_IN is required.')
 })
 
 export type Env = z.infer<typeof envSchema>
