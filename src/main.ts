@@ -1,0 +1,41 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { NestFactory } from '@nestjs/core'
+import { AppModule } from './app.module'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
+import { ValidationPipe } from '@nestjs/common'
+import cookieParser from 'cookie-parser'
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule)
+  app.use(cookieParser())
+
+  // Permite utilizar class transformer a nivel global para los dto
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, // Elimina campos que no estén en el DTO
+      forbidNonWhitelisted: true, // Lanza error si envían campos de más
+      transform: true // Convierte tipos automáticamente
+    })
+  )
+
+  app.enableCors({
+    origin: process.env.ALLOWED_ORIGINS,
+    credentials: true, // Permite cookies
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Es mejor dejarlo claro
+    allowedHeaders: 'Content-Type, Accept, Authorization'
+  })
+
+  const config = new DocumentBuilder()
+    .setTitle('Movies To Rent')
+    .setDescription('The API Movies')
+    .setVersion('1.0')
+    .addTag('movies')
+    .build()
+  const documentFactory = () => SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('api', app, documentFactory)
+  await app.listen(process.env.PORT ?? 3000)
+}
+bootstrap()
