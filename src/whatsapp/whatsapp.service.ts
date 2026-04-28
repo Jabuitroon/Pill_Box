@@ -26,24 +26,28 @@ export class WhatsappService {
     params: string[]
   ) {
     try {
+      console.log('Enviando a...', to.slice(1))
+
       const payload = {
         messaging_product: 'whatsapp',
-        to,
+        to: to.slice(1),
         type: 'template',
         template: {
-          name: templateName,
+          // name: templateName,
+          name: 'hello_world',
           language: {
-            code: 'es_CO'
-          },
-          components: [
-            {
-              type: 'body',
-              parameters: params.map((param) => ({
-                type: 'text',
-                text: param
-              }))
-            }
-          ]
+            // code: 'es_CO'
+            code: 'en_US'
+          }
+          // components: [
+          //   {
+          //     type: 'body',
+          //     parameters: params.map((param) => ({
+          //       type: 'text',
+          //       text: param
+          //     }))
+          //   }
+          // ]
         }
       }
 

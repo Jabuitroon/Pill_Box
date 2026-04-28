@@ -10,6 +10,7 @@ import { PillsModule } from './pills/pills.module'
 import { PrescriptionsModule } from './prescriptions/prescriptions.module'
 import { WhatsappModule } from './whatsapp/whatsapp.module'
 import { ScheduleModule } from '@nestjs/schedule'
+import { ReminderModule } from './reminder/reminder.module'
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { ScheduleModule } from '@nestjs/schedule'
     AuthModule,
     PillsModule,
     PrescriptionsModule,
-    WhatsappModule
+    WhatsappModule,
+    ReminderModule
   ],
   controllers: [AppController],
   providers: [AppService]

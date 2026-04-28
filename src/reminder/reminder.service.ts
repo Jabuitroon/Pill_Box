@@ -1,0 +1,142 @@
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { Cron, CronExpression } from '@nestjs/schedule'
+import { WhatsappService } from '../whatsapp/whatsapp.service'
+import { PrismaService } from '../prisma/prisma.service'
+
+@Injectable()
+export class ReminderService {
+  constructor(
+    private readonly whatsappService: WhatsappService,
+    private readonly prisma: PrismaService
+  ) {}
+
+  // Ejemplo: cada minuto (para pruebas)
+  @Cron(CronExpression.EVERY_MINUTE)
+  async handleReminder() {
+    console.log('⏰ Verificando recordatorios...')
+
+    const now = new Date()
+    const currentTime = now.toTimeString().slice(0, 5)
+
+    const reminders = await this.prisma.reminder.findMany({
+      where: {
+        scheduledTime: currentTime,
+        sent: false
+      },
+      include: {
+        prescription: {
+          include: {
+            patient: true,
+            pill: true
+          }
+        }
+      }
+    })
+
+    for (const r of reminders) {
+      const { patient, pill } = r.prescription
+
+      if (!patient.phone) continue
+
+      await this.whatsappService.sendTemplateMessageWithParams(
+        patient.phone,
+        'recordatorio_medicina',
+        [patient.name, pill.name, r.scheduledTime]
+      )
+
+      await this.prisma.reminder.update({
+        where: { reminder_id: r.reminder_id },
+        data: {
+          sent: true,
+          sentAt: new Date()
+        }
+      })
+    }
+  }
+
+  create(data: { prescriptionId: string; scheduledTime: string }) {
+    return this.prisma.reminder.create({ data })
+  }
+
+  async createBulk(prescriptionId: string, times: string[]) {
+    return await this.prisma.reminder.createMany({
+      data: times.map((time) => ({
+        prescriptionId,
+        scheduledTime: time
+      }))
+    })
+  }
+
+  findAll() {
+    return this.prisma.reminder.findMany({
+      include: {
+        prescription: {
+          include: {
+            patient: true,
+            pill: true
+          }
+        }
+      }
+    })
+  }
+
+  findByPrescription(prescriptionId: string) {
+    return this.prisma.reminder.findMany({
+      where: { prescriptionId }
+    })
+  }
+
+  findPendingByTime(time: string) {
+    return this.prisma.reminder.findMany({
+      where: {
+        scheduledTime: time,
+        sent: false
+      },
+      include: {
+        prescription: {
+          include: {
+            patient: true,
+            pill: true
+          }
+        }
+      }
+    })
+  }
+
+  markAsSent(id: string) {
+    return this.prisma.reminder.update({
+      where: { reminder_id: id },
+      data: {
+        sent: true,
+        sentAt: new Date()
+      }
+    })
+  }
+
+  // 🗑️ Eliminar uno
+  async deleteOne(id: string) {
+    const reminder = await this.prisma.reminder.findUnique({
+      where: { reminder_id: id }
+    })
+
+    if (!reminder) {
+      throw new NotFoundException('Reminder no encontrado')
+    }
+
+    return this.prisma.reminder.delete({
+      where: { reminder_id: id }
+    })
+  }
+
+  // 🔥 Eliminar todos
+  deleteAll() {
+    return this.prisma.reminder.deleteMany()
+  }
+
+  // 🧠 Eliminar por prescription
+  deleteByPrescription(prescriptionId: string) {
+    return this.prisma.reminder.deleteMany({
+      where: { prescriptionId }
+    })
+  }
+}
