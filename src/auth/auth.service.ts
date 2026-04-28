@@ -59,8 +59,6 @@ export class AuthService {
     email,
     password
   }: LoginDto): Promise<{ access_token: string }> {
-    console.log('correo que sale', email)
-
     const user = await this.usersService.findByEmail(email)
     if (!user) {
       throw new UnauthorizedException('Usuario no encontrado')

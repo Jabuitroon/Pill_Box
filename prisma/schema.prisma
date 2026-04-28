@@ -4,8 +4,8 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
   moduleFormat = "cjs"
 }
 
@@ -82,21 +82,17 @@ model Pill {
 }
 
 model Prescription {
-  prescription_id String @id @default(uuid())
-
-  // Relación con el paciente (User)
-  patientId String @map("patient_id")
-  patient   User   @relation(fields: [patientId], references: [user_id])
-
-  // CORRECCIÓN: El campo "references" ahora apunta a pill_id en el modelo Pill
-  pillId String @map("pill_id")
-  pill   Pill   @relation(fields: [pillId], references: [pill_id])
-
-  // Atributos de la toma solicitados
-  schedule    TimeOfDay @map("pres_schedule") // Mañana, tarde o noche
-  timesPerDay Int       @default(1) @map("times_per_day")
-
-  createdAt DateTime @default(now()) @map("created_at")
+  prescription_id String    @id @default(uuid())
+  patientId       String    @map("patient_id")
+  patient         User      @relation(fields: [patientId], references: [user_id])
+  pillId          String    @map("pill_id")
+  pill            Pill      @relation(fields: [pillId], references: [pill_id])
+  intakeTime      String    @map("intake_time")
+  schedule        TimeOfDay @map("pres_schedule")
+  timesPerDay     Int       @default(1) @map("times_per_day")
+  // Para saber si el recordatorio está activo
+  isActive        Boolean   @default(true) @map("is_active")
+  createdAt       DateTime  @default(now()) @map("created_at")
 
   @@map("tbl_prescription")
 }
