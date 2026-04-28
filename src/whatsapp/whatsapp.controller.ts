@@ -5,11 +5,16 @@ import { WhatsappService } from './whatsapp.service'
 export class WhatsappController {
   constructor(private readonly whatsappService: WhatsappService) {}
 
-  @Post('send-template')
-  async sendTemplate(
+  @Post('send-template-params')
+  async sendTemplateWithParams(
     @Body('to') to: string,
-    @Body('template') template: string
+    @Body('template') template: string,
+    @Body('params') params: string[]
   ) {
-    return this.whatsappService.sendTemplateMessage(to, template)
+    return this.whatsappService.sendTemplateMessageWithParams(
+      to,
+      template,
+      params
+    )
   }
 }

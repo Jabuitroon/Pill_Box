@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module'
 import { PillsModule } from './pills/pills.module'
 import { PrescriptionsModule } from './prescriptions/prescriptions.module'
 import { WhatsappModule } from './whatsapp/whatsapp.module'
+import { ScheduleModule } from '@nestjs/schedule'
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { WhatsappModule } from './whatsapp/whatsapp.module'
       isGlobal: true, // Makes ConfigService available everywhere
       cache: true
     }),
+    ScheduleModule.forRoot(),
     PrismaModule,
     UsersModule,
     AuthModule,

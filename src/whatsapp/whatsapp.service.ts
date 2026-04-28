@@ -20,7 +20,11 @@ export class WhatsappService {
     this.apiUrl = `https://graph.facebook.com/v20.0/${this.phoneNumberId}/messages`
   }
 
-  async sendTemplateMessage(to: string, templateName: string) {
+  async sendTemplateMessageWithParams(
+    to: string,
+    templateName: string,
+    params: string[]
+  ) {
     try {
       const payload = {
         messaging_product: 'whatsapp',
@@ -28,7 +32,18 @@ export class WhatsappService {
         type: 'template',
         template: {
           name: templateName,
-          language: { code: 'en_US' }
+          language: {
+            code: 'es_CO'
+          },
+          components: [
+            {
+              type: 'body',
+              parameters: params.map((param) => ({
+                type: 'text',
+                text: param
+              }))
+            }
+          ]
         }
       }
 
@@ -43,9 +58,9 @@ export class WhatsappService {
 
       return response.data
     } catch (error) {
-      console.error(JSON.stringify(error?.response?.data, null, 2))
+      console.error(error?.response?.data || error.message)
       throw new InternalServerErrorException(
-        'Error enviando mensaje de WhatsApp'
+        'Error enviando mensaje con variables'
       )
     }
   }
