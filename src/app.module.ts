@@ -6,8 +6,9 @@ import { validate } from './config/env.validation'
 import { PrismaModule } from './prisma/prisma.module'
 import { UsersModule } from './users/users.module'
 import { AuthModule } from './auth/auth.module'
-import { PillsModule } from './pills/pills.module';
-import { PrescriptionsModule } from './prescriptions/prescriptions.module';
+import { PillsModule } from './pills/pills.module'
+import { PrescriptionsModule } from './prescriptions/prescriptions.module'
+import { WhatsappModule } from './whatsapp/whatsapp.module'
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { PrescriptionsModule } from './prescriptions/prescriptions.module';
     UsersModule,
     AuthModule,
     PillsModule,
-    PrescriptionsModule
+    PrescriptionsModule,
+    WhatsappModule
   ],
   controllers: [AppController],
   providers: [AppService]

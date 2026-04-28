@@ -11,7 +11,9 @@ export const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().min(1, 'JWT_EXPIRES_IN is required.'),
   ADMIN_REGISTRATION_KEY: z
     .string()
-    .min(1, 'ADMIN_REGISTRATION_KEY is required.')
+    .min(1, 'ADMIN_REGISTRATION_KEY is required.'),
+  WHATSAPP_TOKEN: z.string().min(1, 'WHATSAPP_TOKEN is required.'),
+  WHATSAPP_PHONE_ID: z.string().min(1, 'WHATSAPP_PHONE_ID is required.')
 })
 
 export type Env = z.infer<typeof envSchema>
