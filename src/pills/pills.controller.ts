@@ -14,13 +14,9 @@ import { CreatePillDto } from './dto/create-pill.dto'
 import { UpdatePillDto } from './dto/update-pill.dto'
 import { AuthGuard } from '../auth/guards/auth.guard'
 import { RolesGuard } from '../auth/guards/roles.guard'
-import { Roles } from '../auth/decorators/roles.decorator'
-import { Role } from '@app/auth/enums'
 import { Public } from '@app/common/decorators/public.decorator'
 
 @UseGuards(AuthGuard, RolesGuard)
-// se puede listar los roles
-@Roles(Role.PHYSIOTHERAPIST)
 @Controller('pills')
 export class PillsController {
   constructor(private readonly pillsService: PillsService) {}

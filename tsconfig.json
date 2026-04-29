@@ -18,7 +18,8 @@
       "@app/*": ["./src/*"],
       "@lib/*": ["./src/lib/*"],
       "@prisma/client": ["./src/generated/prisma"],
-      "@prisma/enums": ["./src/generated/prisma/enums"]
+      "@prisma/enums": ["./src/generated/prisma/enums"],
+      "@app/generated/*": ["./src/generated/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
