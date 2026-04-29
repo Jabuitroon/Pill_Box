@@ -14,7 +14,7 @@ import { CreatePillDto } from './dto/create-pill.dto'
 import { UpdatePillDto } from './dto/update-pill.dto'
 import { AuthGuard } from '../auth/guards/auth.guard'
 import { RolesGuard } from '../auth/guards/roles.guard'
-import { Public } from '../common/decorators/public.decorator'
+import { Public } from '@app/common/decorators/public.decorator'
 
 @UseGuards(AuthGuard, RolesGuard)
 @Controller('pills')
