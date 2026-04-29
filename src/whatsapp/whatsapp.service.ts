@@ -33,8 +33,7 @@ export class WhatsappService {
         to: to.slice(1),
         type: 'template',
         template: {
-          // name: templateName,
-          name: 'hello_world',
+          name: templateName,
           language: {
             // code: 'es_CO'
             code: 'en_US'

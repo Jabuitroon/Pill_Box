@@ -40,7 +40,7 @@ export class ReminderService {
 
       await this.whatsappService.sendTemplateMessageWithParams(
         patient.phone,
-        'recordatorio_medicina',
+        'hello_world',
         [patient.name, pill.name, r.scheduledTime]
       )
 
