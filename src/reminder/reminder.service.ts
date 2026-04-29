@@ -16,7 +16,15 @@ export class ReminderService {
     console.log('⏰ Verificando recordatorios...')
 
     const now = new Date()
-    const currentTime = now.toTimeString().slice(0, 5)
+
+    const colombiaTime = new Date(
+      now.toLocaleString('en-US', { timeZone: 'America/Bogota' })
+    )
+
+    const hours = colombiaTime.getHours().toString().padStart(2, '0')
+    const minutes = colombiaTime.getMinutes().toString().padStart(2, '0')
+
+    const currentTime = `${hours}:${minutes}`
 
     const reminders = await this.prisma.reminder.findMany({
       where: {
@@ -32,6 +40,8 @@ export class ReminderService {
         }
       }
     })
+
+    console.log(`📦 Recordatorios encontrados: ${reminders.length}`)
 
     for (const r of reminders) {
       const { patient, pill } = r.prescription
