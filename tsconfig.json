@@ -19,7 +19,8 @@
       "@lib/*": ["./src/lib/*"],
       "@prisma/client": ["./src/generated/prisma"],
       "@prisma/enums": ["./src/generated/prisma/enums"],
-      "@app/generated/*": ["./src/generated/*"]
+      "@app/generated/*": ["./src/generated/*"],
+      "@app/common/decorators": ["./src/common/decorators"]
     },
     "incremental": true,
     "skipLibCheck": true,

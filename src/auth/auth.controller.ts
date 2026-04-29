@@ -12,7 +12,7 @@ import { RegisterDto } from './dto/register.dto'
 import type { responseAuth, UserActiveInterface } from './interfaces'
 import { LoginDto } from './dto/login.dto'
 import { AuthGuard } from './guards/auth.guard'
-import { ActiveUser } from '../common/decorators/active-user.decorator'
+import { ActiveUser } from '@app/common/decorators/active-user.decorator'
 import { RegisterAdminDto } from './dto/register-admin.dto'
 
 @Controller('auth')
