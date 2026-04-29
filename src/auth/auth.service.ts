@@ -10,7 +10,7 @@ import { HashingService } from '../providers/hashing/hashing.service'
 import { responseAuth } from './interfaces'
 import { LoginDto } from './dto/login.dto'
 import { RegisterAdminDto } from './dto/register-admin.dto'
-import { UserRole } from '@app/generated/prisma/client'
+import { UserRole } from '../generated/prisma/client'
 import { ConfigService } from '@nestjs/config'
 
 @Injectable()
