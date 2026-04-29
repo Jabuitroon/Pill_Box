@@ -6,6 +6,7 @@ import { ReminderController } from './reminder.controller'
 @Module({
   imports: [WhatsappModule],
   providers: [ReminderService],
-  controllers: [ReminderController]
+  controllers: [ReminderController],
+  exports: [ReminderService]
 })
 export class ReminderModule {}
