@@ -1,13 +1,19 @@
 import { Controller, Get, Headers, UnauthorizedException } from '@nestjs/common'
 import { ReminderService } from '../reminder/reminder.service'
+import { ConfigService } from '@nestjs/config'
 
 @Controller('cron')
 export class CronController {
-  constructor(private readonly reminderService: ReminderService) {}
+  constructor(
+    private readonly reminderService: ReminderService,
+    private configService: ConfigService
+  ) {}
 
   @Get('reminders')
   async runReminders(@Headers('authorization') auth: string) {
-    if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
+    const secret = this.configService.get<string>('CRON_SECRET')
+
+    if (auth !== `Bearer ${secret}`) {
       throw new UnauthorizedException()
     }
 
