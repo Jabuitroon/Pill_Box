@@ -6,7 +6,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service'
 import { CreatePrescriptionDto } from './dto/create-prescription.dto'
 import { UpdatePrescriptionDto } from './dto/update-prescription.dto'
-import { Prisma } from '@app/generated/prisma/client'
+import { Prisma } from '../generated/prisma/client'
 
 @Injectable()
 export class PrescriptionsService {
