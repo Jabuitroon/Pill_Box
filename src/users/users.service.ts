@@ -22,6 +22,7 @@ export class UsersService {
     user_id: true,
     name: true,
     lastName: true,
+    phone: true,
     email: true,
     physiotherapistId: true,
     role: true,
