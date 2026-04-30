@@ -33,20 +33,19 @@ export class WhatsappService {
         to: to.slice(1),
         type: 'template',
         template: {
-          name: templateName,
+          name: 'event_details_reminder_1',
           language: {
-            // code: 'es_CO'
-            code: 'en_US'
-          }
-          // components: [
-          //   {
-          //     type: 'body',
-          //     parameters: params.map((param) => ({
-          //       type: 'text',
-          //       text: param
-          //     }))
-          //   }
-          // ]
+            code: 'es'
+          },
+          components: [
+            {
+              type: 'body',
+              parameters: params.map((param) => ({
+                type: 'text',
+                text: param
+              }))
+            }
+          ]
         }
       }
 

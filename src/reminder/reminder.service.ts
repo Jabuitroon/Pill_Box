@@ -44,6 +44,7 @@ export class ReminderService {
     console.log(`📦 Recordatorios encontrados: ${reminders.length}`)
 
     for (const r of reminders) {
+      console.log(r.prescription)
       const { patient, pill } = r.prescription
 
       if (!patient.phone) continue
@@ -51,7 +52,12 @@ export class ReminderService {
       await this.whatsappService.sendTemplateMessageWithParams(
         patient.phone,
         'hello_world',
-        [patient.name, pill.name, r.scheduledTime]
+        [
+          patient.name,
+          'momento de tomar tus medicamentos para la presión arterial:',
+          pill.name,
+          r.scheduledTime
+        ]
       )
 
       await this.prisma.reminder.update({
